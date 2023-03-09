@@ -1,5 +1,13 @@
 import { useState } from "react";
 import React from 'react';
+import MessageBox from '../components/MessageBox';
+import ListGroup from 'react-bootstrap/ListGroup';
+import Button from 'react-bootstrap/Button';
+import Card from 'react-bootstrap/Card';
+import Row from 'react-bootstrap/Row';
+import { Store } from '../Store';
+import { Helmet } from 'react-helmet-async';
+import Col from 'react-bootstrap/Col';
 
 import {
   createUserWithEmailAndPassword,
@@ -10,14 +18,15 @@ import {
 import "./Login.css";
 import { auth } from "../firebase/Firebase";
 
-function App() {
+function LoginScreen() {
   const [registerEmail, setRegisterEmail] = useState("");
   const [registerPassword, setRegisterPassword] = useState("");
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
 
   const [user, setUser] = useState({});
-  const [massage, setError] = useState("");
+  const [massageLogin, setmassageLogin] = useState("");
+  const [massageRegister, setmassageRegister] = useState("");
 
 
   onAuthStateChanged(auth, (currentUser) => {
@@ -30,77 +39,91 @@ function App() {
 
   //create user
   const register = async () => {
-    setError("");
+    setmassageRegister("");
     try {
       const user = await createUserWithEmailAndPassword(
         auth,
         registerEmail,
         registerPassword
       );
+      setmassageRegister("successfully connected")
       console.log(user);
     } catch (error) {
-      setError(error.message);
+      setmassageRegister("Password longer than 6 characters or email wrong");
       console.log(error.message);
     }
   };
 
   //login
   const login = async () => {
-    setError("");
+    setmassageLogin("");
     try {
       const user = await signInWithEmailAndPassword(
         auth,
         loginEmail,
         loginPassword
       );
+      setmassageLogin("successfully connected")
       console.log(user);
     } catch (error) {
-      setError(error.message);
+      setmassageLogin("Email or password wrong");
       console.log(error.message);
     }
   };
 
-  //logout
-  const logout = async () => {
-    await signOut(auth);
-  };
-
-
   return (
     <div className="App">
-      <p>
-        <div>
-          <h3> Register User </h3>
-          <p>
-            <input placeholder="Email..." onChange={(event) => { setRegisterEmail(event.target.value); }} />
-          </p>
-          <input placeholder="Password..." onChange={(event) => { setRegisterPassword(event.target.value); }} />
-          <br />
-          <br />
-          <button onClick={register}> Create User</button>
+      <Helmet>
+        <title>Login</title>
+      </Helmet>
+      <Row>
+        <Col md={4}>
+          <Card>
+            <Card.Body>
+              <ListGroup variant="flush">
+                  <ListGroup.Item>  
+                    <h3> Register User </h3>
+                  </ListGroup.Item>
+                <ListGroup.Item>
+                {massageRegister}
 
-        </div>
-      </p>
-      <p>
-        <div>
-          <h3> Login </h3>
-          <p>
-            <input placeholder="Email..." onChange={(event) => { setLoginEmail(event.target.value); }} />
-          </p>
-          <input placeholder="Password..." onChange={(event) => { setLoginPassword(event.target.value); }} />
-          <br />
-          <br />
-          <button onClick={login}> Login</button>
-        </div>
-      </p>
+                <p>
+                  <input placeholder="Email..." onChange={(event) => { setRegisterEmail(event.target.value); }} />
+                </p>
+                <input placeholder="Password..." onChange={(event) => { setRegisterPassword(event.target.value); }} />
+                <br />
+                <br />
+                <Button type="button" onClick={register}> Create User</Button>
+              </ListGroup.Item>
+            </ListGroup>
+          </Card.Body>
+        </Card>
+        </Col>
+        <Col md={4}>
+          <Card>
+            <Card.Body>
+              <ListGroup variant="flush">
+                  <ListGroup.Item> 
+                  <h3> Login </h3>
+                </ListGroup.Item>
+                <ListGroup.Item> 
+                  {massageLogin}
+                  <p>
+                    <input placeholder="Email..." onChange={(event) => { setLoginEmail(event.target.value); }} />
+                  </p>
+                  <input placeholder="Password..." onChange={(event) => { setLoginPassword(event.target.value); }} />
+                  <br />
+                  <br />
+                  <Button onClick={login}> Login</Button>
+                </ListGroup.Item> 
+            </ListGroup>
+          </Card.Body>
+        </Card>
+        </Col>
+    </Row>
 
-      <h4> User Logged In: </h4>
-      {user.email}
-      {massage}
-      <button onClick={logout}> Sign Out </button>
-
-    </div>
+  </div>
   );
 }
 
-export default App;
+export default LoginScreen;

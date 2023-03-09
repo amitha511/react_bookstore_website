@@ -1,5 +1,7 @@
 import express from 'express';
 import Product from '../models/productModel.js';
+import cors from 'cors';
+
 
 const productRouter = express.Router();
 
@@ -92,6 +94,45 @@ productRouter.get('/:id', async (req, res) => {
   } else {
     res.status(404).send({ message: 'Product Not Found' });
   }
+});
+
+productRouter.get('/search/:name', async (req, res) => {
+  try {
+    const product = await Product.find({ "name": req.params.name });
+    res.send(product);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+productRouter.post('/addProduct', (req, res) => {
+    const product = new Product(req.body);
+    product.save((err, savedProduct) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send('Unable to save product to database');
+        } else {
+            res.send(savedProduct);
+        }
+    });
+});
+
+productRouter.delete('/:bookId', async (req, res) => {
+    
+  const bookId = req.params.bookId;
+
+    try {
+        const result = await Product.deleteOne({ _id: bookId });
+        if (result.deletedCount === 0) {
+            res.status(404).json({ message: `Book with ID ${bookId} not found` });
+        } else {
+            res.json({ message: `Book with ID ${bookId} has been removed` });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
 });
 
 export default productRouter;

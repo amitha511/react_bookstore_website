@@ -7,7 +7,6 @@ import { Store } from '../Store';
 
 function Product(props) {
   const { product } = props;
-
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const {
     cart: { cartItems },
@@ -40,6 +39,7 @@ function Product(props) {
         <Button onClick={() => addToCartHandler(product)}>Add to cart</Button>
       </Card.Body>
     </Card>
+
   );
 }
 export default Product;

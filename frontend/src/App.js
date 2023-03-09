@@ -1,5 +1,6 @@
 import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
 import "./App.css";
+import product from './components/Product'
 import HomeScreen from './screens/HomeScreen';
 import LoginScreen from './screens/LoginScreen'
 import ProductScreen from './screens/ProductScreen';
@@ -31,7 +32,7 @@ function App() {
 
    if (currentUser == null) {
      setUser("not connected");
-       setStatus("hello guest");
+       setStatus("guest");
    }
    else {
      setUser(currentUser);
@@ -45,36 +46,36 @@ function App() {
     <BrowserRouter>
       <div className="d-flex flex-column site-container">
         <header>
-          <Navbar className="custom-navbar">
-          
-            <Container>
-              <LinkContainer to="/">
-                <Navbar.Brand>Amazon best seller </Navbar.Brand>
-              
+          <Navbar className="navbar">
+            
+            <Container className='navbar_container'>
+              <LinkContainer to="/"><Navbar.Brand className='logo'>Amazon best seller </Navbar.Brand></LinkContainer>
 
-              </LinkContainer>
-              <Nav className="me-auto">
-                <Link to="/cart" className="nav-link">
-                  Cart
+              <Nav className="navbar_menu">
+                  <Nav className="navbar_item">
+                <Link to="/cart" className="nav-link">Cart
                   {cart.cartItems.length > 0 && (
                     <Badge pill bg="danger">
                       {cart.cartItems.reduce((a, c) => a + c.quantity, 0)}
                     </Badge>
-                  )}
-                </Link>
-                <Link to="/login" className="nav-link" onChange={onAuthStateChanged}>
-                  Login
-                </Link>
-                <Link to="/Admin" className="nav-link">
-                  Admin
-                </Link>
-                <button onClick={logout} > Sign Out </button>
-                <p className='nav-link'> hello,{statusUser}</p>
+                    )} </Link>
+                </Nav>
+                <Nav className="navbar_item">
 
-              </Nav>
+                  <Link to="/login" className="nav-link" onChange={onAuthStateChanged}>Login</Link></Nav>
+                  <Nav className="navbar_item">
+                  <Link to="/Admin" className="nav-link">Admin
+                  
+                  </Link>
+
+                </Nav>
+                <button onClick={logout} className="button"> Sign Out </button>
+                  <li className='nav-link'> hello,{statusUser}</li>
+            </Nav>
             </Container>
             </Navbar>
         </header>
+
         <main>
           <Container className="mt-3">
             <Routes>

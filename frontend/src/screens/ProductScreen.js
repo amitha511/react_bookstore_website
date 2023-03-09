@@ -1,151 +1,70 @@
 import axios from 'axios';
-import React,{ useContext, useEffect, useReducer } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Card from 'react-bootstrap/Card';
-import ListGroup from 'react-bootstrap/ListGroup';
-import Badge from 'react-bootstrap/Badge';
-import Button from 'react-bootstrap/Button';
-import { Helmet } from 'react-helmet-async';
-import LoadingBox from '../components/LoadingBox';
-import MessageBox from '../components/MessageBox';
-import { getError } from '../utils';
-import { Store } from '../Store';
-import "firebase/database";
+import React, { useEffect, useReducer, useState } from 'react';
 
- 
+import { useParams } from 'react-router-dom';
 
-//print status action to controller
-const reducer = (state, action) => {
-  switch (action.type) {
-    case 'FETCH_REQUEST':
-      return { ...state, loading: true };
-    case 'FETCH_SUCCESS':
-      return { ...state, product: action.payload, loading: false };
-    case 'FETCH_FAIL':
-      return { ...state, loading: false, error: action.payload };
-    default:
-      return state;
-  }
-};
-
+import './ProductScreen.css'
 
 function ProductScreen() {
-  const navigate = useNavigate();
-  const params = useParams();
-  const { name } = params;
+  const [name] = useState(useParams().name);
 
-  const [{ loading, error, product }, dispatch] = useReducer(reducer, {
-    product: [],
-    loading: true,
-    error: '',
-  });
+  const [enterdName, setEnterdName] = useState("");
+    const [enterdAmount, setEnterdAmount] = useState("");
+    const [enterdImg, setEnterdImg] = useState("");
+    const [enterdGenre, setEnterdGener] = useState("");
+    const [enterdStore, setEnterdStore] = useState("");
+    const [enterdLanguage, setEnterdLanguage] = useState("");
+    const [enterdPages, setEnterdPages] = useState("");
+    const [enterdYear, setEnterdYear] = useState("");
 
+  let product1 = "";
   useEffect(() => {
-    const fetchData = async () => {
-      dispatch({ type: 'FETCH_REQUEST' });
-      try {
-        const result = await axios.get(`/api/products/name/${name}`);
-        dispatch({ type: 'FETCH_SUCCESS', payload: result.data });
-      } catch (err) {
-        dispatch({ type: 'FETCH_FAIL', payload: getError(err) });
-      }
-    };
-    fetchData();
-  }, [name]);
-
-  const { state, dispatch: ctxDispatch } = useContext(Store);
-  const { cart } = state;
-
-
-  const addToCartHandler = async () => {
-    const existItem = cart.cartItems.find((x) => x._id === product._id);
-    const quantity = existItem ? existItem.quantity + 1 : 1;
-    const { data } = await axios.get(`/api/products/${product._id}`);
-    if (data.countInStock < quantity) {
-      window.alert('Sorry. Product is out of stock');
-      return;
+  const loadProduct = async () => {
+    try {
+    console.log(name);
+      const result = await axios.get(`/api/products/search/` + name);
+      product1 = result.data;
+      setEnterdName(product1[0].name)
+      setEnterdImg(product1[0].img);
+      setEnterdAmount(product1[0].amount);
+      setEnterdGener(product1[0].gener)
+      setEnterdStore(product1[0].store)
+      setEnterdLanguage(product1[0].language)
+      setEnterdPages(product1[0].pages)
+      setEnterdYear(product1[0].year)
+  } catch (err) {
+    console.log(err);
     }
-    ctxDispatch({
-      type: 'CART_ADD_ITEM',
-      payload: { ...product, quantity },
-    });
-    navigate('/cart');
+  }
+    loadProduct();
+  },[name])
+
+    return(
+      <div className="app" >
+        {
+            <div className="details" >
+              <div className="big-img">
+                <img src={enterdImg} alt={enterdName} />
+              </div>
+
+              <div className="box">
+                <div className="row">
+                  <h2>{enterdName}</h2>
+                </div>
+                  <p>Amount: {enterdAmount} $</p>
+                <p>Page: {enterdPages}</p>
+              <p>Year: {enterdYear}</p>
+              <p>Language: {enterdLanguage}</p>
+
+                <button className="cart">Add to cart</button>
+
+              </div>
+            </div>
+          
+        }
+      </div>
+    );
   };
 
 
-
-  
-  return loading ? (
-    <LoadingBox />
-  ) : error ? (
-    <MessageBox variant="danger">{error}</MessageBox>
-  ) : (
-        <div>
-      <Row>
-        <Col md={6}>
-          <img
-            className="img-large"
-            src={product.img}
-            alt={product.name}
-          ></img>
-        </Col>
-        <Col md={3}>
-          <ListGroup variant="flush">
-            <ListGroup.Item>
-              <Helmet>
-                <title>{product.name}</title>
-              </Helmet>
-              <h1>{product.name}</h1>
-            </ListGroup.Item>
-            <ListGroup.Item>
-            </ListGroup.Item>
-            <ListGroup.Item>Pirce : ${product.amount}</ListGroup.Item>
-            <ListGroup.Item>
-              Description:
-              <p>{product.description}</p>
-            </ListGroup.Item>
-          </ListGroup>
-        </Col>
-        <Col md={3}>
-          <Card>
-            <Card.Body>
-              <ListGroup variant="flush">
-                <ListGroup.Item>
-                  <Row>
-                    <Col>Price:</Col>
-                    <Col>${product.amount}</Col>
-                  </Row>
-                </ListGroup.Item>
-                <ListGroup.Item>
-                  <Row>
-                    <Col>Status:</Col>
-                    <Col>
-                      {product.countInStock > 0 ? (
-                        <Badge bg="success">In Stock</Badge>
-                      ) : (
-                        <Badge bg="danger">Unavailable</Badge>
-                      )}
-                    </Col>
-                  </Row>
-                </ListGroup.Item>
-
-                {product.countInStock > 0 && (
-                  <ListGroup.Item>
-                    <div className="d-grid">
-                      <Button onClick={addToCartHandler} variant="primary">
-                        Add to Cart
-                      </Button>
-                    </div>
-                  </ListGroup.Item>
-                )}
-              </ListGroup>
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
-    </div>
-  );
-}
 export default ProductScreen;
