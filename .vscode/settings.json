@@ -1,0 +1,8 @@
+{
+    "files.autoSave": "off",
+    "editor.insertSpaces": true,
+    "editor.wordWrap": "off",
+    "editor.formatOnSave": false,
+    "editor.formatOnType": true,
+    "editor.linkedEditing": false
+}

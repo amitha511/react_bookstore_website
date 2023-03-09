@@ -2,6 +2,7 @@ import express from 'express';
 import data from './data.js';
 import mongoose from 'mongoose';
 import seedRouter from './routes/seedRoutes.js';
+import userRouter from './routes/userRouter.js';
 import productRouter from './routes/productRoutes.js';
 import buyingRouter from './routes/buyingRouter.js'
 import bodyParser from 'body-parser';
@@ -20,8 +21,10 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use('/api/seed', seedRouter);
+app.use('/api/users', userRouter);
 app.use('/api/products', productRouter);
 app.use('/', buyingRouter);
+
 
 
 

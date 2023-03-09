@@ -5,24 +5,9 @@ import Card from 'react-bootstrap/Card';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
-
 import '../App.css'
 import ListProduct from '../components/ListProduct';
 import './AdminScreen.css';
-
-
-const reducer = (state, action) => {
-  switch (action.type) {
-    case 'FETCH_REQUEST':
-      return { ...state, loading: true };
-    case 'FETCH_SUCCESS':
-      return { ...state, products: action.payload, loading: false };
-    case 'FETCH_FAIL':
-      return { ...state, loading: false, error: action.payload };
-    default:
-      return state;
-  }
-};
 
 const AdminScreen = () => {
  
@@ -141,7 +126,7 @@ const AdminScreen = () => {
                                 <input type="text" value={enterdImg} onChange={imgChangeHendler}/>
                             </Col>
                             <Col md={3} className='new-expense_control'>
-                                <label>Genere</label><br/>
+                                <label>Genre</label><br/>
                                                     <select type="text" value={enterdGenre} onChange={genereChangeHendler}>
                                                          <option value="action">Action</option>
                                 <option value="fantasy">Fantasy</option>
@@ -151,9 +136,6 @@ const AdminScreen = () => {
                                                         <option value="horror">Horror</option>
                                                         <option value="comedy">Comedy</option>
                                                           <option value="adventure">Adventure</option>
-
-
-
                                 </select>
                             </Col>
                             </Row>

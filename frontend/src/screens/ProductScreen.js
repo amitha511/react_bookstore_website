@@ -1,67 +1,59 @@
 import axios from 'axios';
 import React, { useEffect, useReducer, useState } from 'react';
-
+import Button from 'react-bootstrap/esm/Button';
+import logger from 'use-reducer-logger';
+import AddCart from '../components/AddCart'
 import { useParams } from 'react-router-dom';
-
+import { Store } from '../Store';
 import './ProductScreen.css'
 
 function ProductScreen() {
+  const [product, setProduct] = useState([]);
   const [name] = useState(useParams().name);
-
-  const [enterdName, setEnterdName] = useState("");
-    const [enterdAmount, setEnterdAmount] = useState("");
-    const [enterdImg, setEnterdImg] = useState("");
-    const [enterdGenre, setEnterdGener] = useState("");
-    const [enterdStore, setEnterdStore] = useState("");
-    const [enterdLanguage, setEnterdLanguage] = useState("");
-    const [enterdPages, setEnterdPages] = useState("");
-    const [enterdYear, setEnterdYear] = useState("");
-
-  let product1 = "";
+  
+ let product1=[];
   useEffect(() => {
   const loadProduct = async () => {
     try {
+     
     console.log(name);
       const result = await axios.get(`/api/products/search/` + name);
-      product1 = result.data;
-      setEnterdName(product1[0].name)
-      setEnterdImg(product1[0].img);
-      setEnterdAmount(product1[0].amount);
-      setEnterdGener(product1[0].gener)
-      setEnterdStore(product1[0].store)
-      setEnterdLanguage(product1[0].language)
-      setEnterdPages(product1[0].pages)
-      setEnterdYear(product1[0].year)
+      product1 = result.data; 
+      setProduct(product1[0])
+
   } catch (err) {
     console.log(err);
     }
   }
     loadProduct();
-  },[name])
+    setProduct(product1)
+
+  }, [name])
+  
 
     return(
       <div className="app" >
-        {
+        
             <div className="details" >
               <div className="big-img">
-                <img src={enterdImg} alt={enterdName} />
+                <img src={product.img} alt={product.name} />
               </div>
 
               <div className="box">
                 <div className="row">
-                  <h2>{enterdName}</h2>
+                  <h2>{product.name}</h2>
                 </div>
-                  <p>Amount: {enterdAmount} $</p>
-                <p>Page: {enterdPages}</p>
-              <p>Year: {enterdYear}</p>
-              <p>Language: {enterdLanguage}</p>
+              <p>Amount: {product.amount} $</p>
+              <p>Store: {product.store}</p>
+              <p>Genere: {product.Genere}</p>
+              <p>Language: {product.language}</p>
+              <p>Pages: {product.pages}</p>
+            <p>Year: {product.year}</p>
+                      <AddCart product={product}></AddCart>
 
-                <button className="cart">Add to cart</button>
+          </div>
+          </div>
 
-              </div>
-            </div>
-          
-        }
       </div>
     );
   };

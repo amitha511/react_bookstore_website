@@ -2,18 +2,18 @@ import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import React,{ useContext } from 'react';
+import React,{ useContext, useState } from 'react';
 import { Store } from '../Store';
-import AddCart from './AddCart';
 
-function Product(props) {
-  const { product } = props;
+function AddCart(props) {
+  const { product } =props;
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const {
     cart: { cartItems },
   } = state;
 
   const addToCartHandler = async (item) => {
+    console.log(item)
     const existItem = cartItems.find((x) => x._id === product._id);
     const quantity = existItem ? existItem.quantity + 1 : 1;
     const { data } = await axios.get(`/api/products/${item._id}`);
@@ -28,19 +28,9 @@ function Product(props) {
   };
 
   return (
-    <Card>
-      <Link to={`/product/${product.name}`}>
-        <img src={product.img} className="card-img-top" alt={product.name} />
-      </Link>
-      <Card.Body>
-        <Link to={`/product/${product.name}`}>
-          <Card.Title>{product.name}</Card.Title>
-        </Link>
-        <Card.Text>${product.amount}</Card.Text>
-        <AddCart product={product}></AddCart>
-      </Card.Body>
-    </Card>
+    
+    <Button onClick={() => addToCartHandler(product)}>Add to cart</Button>
 
   );
 }
-export default Product;
+export default AddCart;

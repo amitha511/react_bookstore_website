@@ -3,13 +3,11 @@ import axios from 'axios';
 import logger from 'use-reducer-logger';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import ProductAdmin from './ProductAdmin';
+import Product from './Product';
 import { Helmet } from 'react-helmet-async';
 import LoadingBox from './LoadingBox';
 import MessageBox from './MessageBox';
 import '../App.css'
-
-
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -24,7 +22,7 @@ const reducer = (state, action) => {
   }
 };
 
-const ListProduct = () => {
+function HomeProduct() {
   const [{ loading, error, products }, dispatch] = useReducer(logger(reducer), {
     products: [],
     loading: true,
@@ -115,10 +113,20 @@ const ListProduct = () => {
     else
       setYearSearch("");
   }
-    
-    
+
+    const backgroundImage = {
+    backgroundImage: "url('https://t3.ftcdn.net/jpg/03/58/79/66/360_F_358796655_1Zoe4oyLOoE7lL4izOvy8DvCP0xypYgg.jpg')",
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+  };
+
   return (
-    <div><p>
+    <div>
+    <Helmet>
+        <title >Amazon best seller</title>        
+      </Helmet>
+      <h1>Our Books</h1>
+      <p>
         <label for="genre">Genre: </label>
         <select name="genre" id="genre" onChange={(event) => { genre(event.target.value); }}>
           <option value="all">all</option>
@@ -170,6 +178,13 @@ const ListProduct = () => {
           <option value="2023">2023</option>
         </select>
       </p>
+
+      {/* <h4>Search:</h4>
+      <input type="search" placeholder="name..." onChange={(event) => {genre(event.target.value);}}/>
+      <br /> */}
+      <br />
+      <br />
+
       <div className="products">
         {loading ? (
           <LoadingBox />
@@ -179,7 +194,7 @@ const ListProduct = () => {
           <Row>
             {products.map((product) => (
               <Col key={product.name} sm={6} md={4} lg={3} className="mb-3">
-                <ProductAdmin product={product}></ProductAdmin>
+                <Product product={product}></Product>
               </Col>
             ))}
           </Row>
@@ -188,4 +203,4 @@ const ListProduct = () => {
     </div>
   );
 }
-export default ListProduct;
+export default HomeProduct;

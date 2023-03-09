@@ -21,6 +21,9 @@ import { auth } from "../firebase/Firebase";
 function LoginScreen() {
   const [registerEmail, setRegisterEmail] = useState("");
   const [registerPassword, setRegisterPassword] = useState("");
+    const [registerFirstName, setRegisterFirstName] = useState("");
+  const [registerLastName, setRegisterLastName] = useState("");
+    const [registerUserName, setRegisterUserName] = useState("");
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
 
@@ -45,14 +48,41 @@ function LoginScreen() {
         auth,
         registerEmail,
         registerPassword
-      );
+      ); 
+      const userData = {
+        email: registerEmail,
+        firstName: registerFirstName,
+        lastName: registerLastName,
+        userName: registerUserName,
+      }
+        setRegisterFirstName("");
+        setRegisterEmail("");
+        setRegisterLastName("");
+        setRegisterUserName(""); 
+      
+      addUserHendler(userData);
       setmassageRegister("successfully connected")
+      window.location.href = "/";
+
       console.log(user);
     } catch (error) {
       setmassageRegister("Password longer than 6 characters or email wrong");
       console.log(error.message);
     }
   };
+
+  async function addUserHendler(userData) {
+      console.log(userData);
+      const response = await fetch('http://localhost:5000/api/users/addUser', {
+          method: 'POST',
+          body: JSON.stringify(userData),
+          headers: {
+              'Content-Type': 'application/json'
+          }
+      });
+      const data = await response;
+      console.log(data);
+  }
 
   //login
   const login = async () => {
@@ -63,6 +93,8 @@ function LoginScreen() {
         loginEmail,
         loginPassword
       );
+          window.location.href = "/";
+
       setmassageLogin("successfully connected")
       console.log(user);
     } catch (error) {
@@ -70,6 +102,7 @@ function LoginScreen() {
       console.log(error.message);
     }
   };
+  
 
   return (
     <div className="App">
@@ -86,7 +119,15 @@ function LoginScreen() {
                   </ListGroup.Item>
                 <ListGroup.Item>
                 {massageRegister}
-
+                <p>
+                  <input placeholder="First name..." onChange={(event) => { setRegisterFirstName(event.target.value); }} />
+                  </p>
+                <p>
+                  <input placeholder="Last name..." onChange={(event) => { setRegisterLastName(event.target.value); }} />
+                  </p>
+                <p>
+                  <input placeholder="user name..." onChange={(event) => { setRegisterUserName(event.target.value); }} />
+                </p>
                 <p>
                   <input placeholder="Email..." onChange={(event) => { setRegisterEmail(event.target.value); }} />
                 </p>

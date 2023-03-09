@@ -118,6 +118,33 @@ productRouter.post('/addProduct', (req, res) => {
     });
 });
 
+
+productRouter.post('/update', async (req, res) => {
+
+  Product.findOne({ _id: req.body._id }, function (err, product) {
+    if (!err) {
+      console.log(product.price);
+      product.name = req.body.name;
+      product.amount = req.body.amount;
+      product.img = req.body.img;
+      product.genre = req.body.genre;
+      product.pages = req.body.pages;
+      product.year = req.body.year;
+      product.store = req.body.store;
+      product.language = req.body.language;
+      product.save(function (err) {
+        if (!err) {
+          console.log("Updated!");
+        }
+        else {
+          console.log("Error: could not save");
+        }
+      });
+    }
+  });
+});
+
+
 productRouter.delete('/:bookId', async (req, res) => {
     
   const bookId = req.params.bookId;
