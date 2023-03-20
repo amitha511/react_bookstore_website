@@ -6,6 +6,7 @@ import React,{ useContext , useState } from 'react';
 import { Store } from '../Store';
 import { remove } from 'firebase/database';
 
+
 function Product(props) {
   const { product } = props;
       
@@ -68,8 +69,9 @@ function Product(props) {
             language: enterdLanguage,
             pages: enterdPages,
             year: enterdYear,
-        };
-        window.alert("Update Completed!");
+       };
+
+       window.alert("Update Completed!");
         window.location.reload();
         await axios.post("http://localhost:5000/api/products/update", productUpdate);
 
@@ -83,11 +85,14 @@ function Product(props) {
             headers: {
                 'Content-Type': 'application/json'
             }
+            
         });
+            window.alert("Remove Completed!");
+        window.location.reload();
 
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
-        }
+            }
 
         const data = await response.json();
         console.log(data);
@@ -98,7 +103,7 @@ function Product(props) {
 
 
   return (
-    <Card>
+    <Card className='details'>
       <Card.Body>
         <Card.Title className="card-title">{product.name}</Card.Title>
                 <img src={product.img} className="card-img-top" alt={product.name} />

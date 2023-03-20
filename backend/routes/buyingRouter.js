@@ -9,7 +9,7 @@ buyingRouter.post('/', async (req, res) => {//Post Request - On Buy Now - Get th
     var name = req.body.name;
     // var quantity = req.body.quantity;
     var amount = req.body.amount;
-    var username = req.body.username;
+    var userName = req.body.userName;
     var email = req.body.email;
     const data = {
         products: [
@@ -17,7 +17,7 @@ buyingRouter.post('/', async (req, res) => {//Post Request - On Buy Now - Get th
                 // _id: '1',
                 name: name,
                 email: email,
-                username: username,
+                userName: userName,
                 amount: amount,
             },
         ]

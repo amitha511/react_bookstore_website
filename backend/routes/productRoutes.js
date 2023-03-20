@@ -5,6 +5,19 @@ import cors from 'cors';
 
 const productRouter = express.Router();
 
+productRouter.get('/grouped-by-category', async (req, res) => {
+  try {
+    const result = await Product.aggregate([
+      { $group: { _id: '$genre', count: { $sum: 1 } } },
+      { $project: { _id: 0, category: '$_id', count: 1 } },
+    ]);
+    res.send(result);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: 'Server Error' });
+  }
+});
+
 productRouter.get('/', async (req, res) => {
 
   const products = await Product.find();

@@ -1,5 +1,11 @@
 {
   "dependencies": {
-    "firebase": "^9.15.0"
+    "@emotion/react": "^11.10.6",
+    "@emotion/styled": "^11.10.6",
+    "@mui/icons-material": "^5.11.11",
+    "@mui/material": "^5.11.13",
+    "@mui/system": "^5.11.13",
+    "firebase": "^9.15.0",
+    "socket.io": "^4.6.1"
   }
 }

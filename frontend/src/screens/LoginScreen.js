@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import React from 'react';
 import MessageBox from '../components/MessageBox';
 import ListGroup from 'react-bootstrap/ListGroup';
@@ -17,13 +17,12 @@ import {
 } from "firebase/auth";
 import "./Login.css";
 import { auth } from "../firebase/Firebase";
+import TextField from '@mui/material/TextField';
+import io from 'socket.io-client';
+
 
 function LoginScreen() {
-  const [registerEmail, setRegisterEmail] = useState("");
-  const [registerPassword, setRegisterPassword] = useState("");
-    const [registerFirstName, setRegisterFirstName] = useState("");
-  const [registerLastName, setRegisterLastName] = useState("");
-    const [registerUserName, setRegisterUserName] = useState("");
+
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
 
@@ -31,7 +30,19 @@ function LoginScreen() {
   const [massageLogin, setmassageLogin] = useState("");
   const [massageRegister, setmassageRegister] = useState("");
 
+    useEffect(() => {
+    const socket = io();
+    // Socket.IO event listener for userCount updates
+    socket.on('userCount', (count) => {
+      //setUserCount(count);
+    });
 
+    return () => {
+      socket.disconnect();
+    };
+
+    }, []);
+  
   onAuthStateChanged(auth, (currentUser) => {
     // setError("")
     if (currentUser == null)
@@ -39,50 +50,6 @@ function LoginScreen() {
     else
       setUser(currentUser);
   });
-
-  //create user
-  const register = async () => {
-    setmassageRegister("");
-    try {
-      const user = await createUserWithEmailAndPassword(
-        auth,
-        registerEmail,
-        registerPassword
-      ); 
-      const userData = {
-        email: registerEmail,
-        firstName: registerFirstName,
-        lastName: registerLastName,
-        userName: registerUserName,
-      }
-        setRegisterFirstName("");
-        setRegisterEmail("");
-        setRegisterLastName("");
-        setRegisterUserName(""); 
-      
-      addUserHendler(userData);
-      setmassageRegister("successfully connected")
-      window.location.href = "/";
-
-      console.log(user);
-    } catch (error) {
-      setmassageRegister("Password longer than 6 characters or email wrong");
-      console.log(error.message);
-    }
-  };
-
-  async function addUserHendler(userData) {
-      console.log(userData);
-      const response = await fetch('http://localhost:5000/api/users/addUser', {
-          method: 'POST',
-          body: JSON.stringify(userData),
-          headers: {
-              'Content-Type': 'application/json'
-          }
-      });
-      const data = await response;
-      console.log(data);
-  }
 
   //login
   const login = async () => {
@@ -105,43 +72,14 @@ function LoginScreen() {
   
 
   return (
+    <div className="screen">
     <div className="App">
       <Helmet>
         <title>Login</title>
       </Helmet>
       <Row>
         <Col md={4}>
-          <Card>
-            <Card.Body>
-              <ListGroup variant="flush">
-                  <ListGroup.Item>  
-                    <h3> Register User </h3>
-                  </ListGroup.Item>
-                <ListGroup.Item>
-                {massageRegister}
-                <p>
-                  <input placeholder="First name..." onChange={(event) => { setRegisterFirstName(event.target.value); }} />
-                  </p>
-                <p>
-                  <input placeholder="Last name..." onChange={(event) => { setRegisterLastName(event.target.value); }} />
-                  </p>
-                <p>
-                  <input placeholder="user name..." onChange={(event) => { setRegisterUserName(event.target.value); }} />
-                </p>
-                <p>
-                  <input placeholder="Email..." onChange={(event) => { setRegisterEmail(event.target.value); }} />
-                </p>
-                <input placeholder="Password..." onChange={(event) => { setRegisterPassword(event.target.value); }} />
-                <br />
-                <br />
-                <Button type="button" onClick={register}> Create User</Button>
-              </ListGroup.Item>
-            </ListGroup>
-          </Card.Body>
-        </Card>
-        </Col>
-        <Col md={4}>
-          <Card>
+            <Card className="box1">
             <Card.Body>
               <ListGroup variant="flush">
                   <ListGroup.Item> 
@@ -150,9 +88,9 @@ function LoginScreen() {
                 <ListGroup.Item> 
                   {massageLogin}
                   <p>
-                    <input placeholder="Email..." onChange={(event) => { setLoginEmail(event.target.value); }} />
+                    <TextField placeholder="Email..." label ="Email" onChange={(event) => { setLoginEmail(event.target.value); }} />
                   </p>
-                  <input placeholder="Password..." onChange={(event) => { setLoginPassword(event.target.value); }} />
+                  <TextField type ="password" label ="Password" placeholder="Password..." onChange={(event) => { setLoginPassword(event.target.value); }} />
                   <br />
                   <br />
                   <Button onClick={login}> Login</Button>
@@ -163,7 +101,8 @@ function LoginScreen() {
         </Col>
     </Row>
 
-  </div>
+      </div>
+      </div>
   );
 }
 

@@ -1,4 +1,4 @@
-import React,{ useContext } from 'react';
+import React,{ useContext, useEffect, useState } from 'react';
 import { Store } from '../Store';
 import { Helmet } from 'react-helmet-async';
 import Row from 'react-bootstrap/Row';
@@ -9,8 +9,35 @@ import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { FiArrowRight } from "react-icons/fi";
+
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+  signOut,
+} from "firebase/auth";
+import "./Login.css";
+import { auth } from "../firebase/Firebase";
+import io from 'socket.io-client';
 
 export default function CartScreen() {
+
+  const [newNumber, setNumber] = useState('');
+
+    useEffect(() => {
+    const socket = io();
+    // Socket.IO event listener for userCount updates
+    socket.on('userCount', (count) => {
+      //setUserCount(count);
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+
+    }, []);
+  
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const {
     cart: { cartItems },
@@ -36,36 +63,57 @@ export default function CartScreen() {
     var name;
     var p;
     var q;
-    var email = document.getElementById('email').value;
-    var username = document.getElementById('username').value;
-    if (email != "" && username !== "") {
-      document.getElementById('username');
-      cartItems.map(async (item) => (
-        //name = item.name,
-        name = item.name,
-        p = item.amount,
-        q = item.quantity,
-        oneItem = { username: username, email: email, name: name, amount: p },
-      await axios.post("http://localhost:5000/", oneItem)
+    if (auth.currentUser != null) {
+      var email = auth.currentUser.email;
+      var address = document.getElementById('Address').value;
+    
+      if (email != "" && address != "") {
+        document.getElementById('Address');
+        cartItems.map(async (item) => (
+          //name = item.name,
+          name = item.name,
+          p = item.amount,
+          q = item.quantity,
+          oneItem = { userName: address, email: email, name: name, amount: p },
+        await axios.post("http://localhost:5000/", oneItem)
 
-      ));
-      window.alert('Thank you!');
-      cartItems.map((item) => (
-        removeItemHandler(item)
-      ));
-      document.getElementById('email').value = "";
-      document.getElementById('username').value = "";
+        ));
+        window.alert('Thank you!');
+        cartItems.map((item) => (
+          removeItemHandler(item)
+        ));
+        document.getElementById('Address').value = "";
+      }
+      else {
+        window.alert('You must fill address filed Please Try Again!');
+      }
     }
     else {
-      window.alert('You must fill both Name and Email fileds Please Try Again!');
+      window.alert('You must log in to the site');
     }
-
-
-
   };
 
+  
+  const handleClick = async () => {
+    try {
+      const response = await fetch(`https://currency-converter-by-api-ninjas.p.rapidapi.com/v1/convertcurrency?have=USD&want=ILS&amount=${number}`, {
+        method: 'GET',
+        headers: {
+          'X-RapidAPI-Key': '1d7822b503mshee9d8ae2c3caa64p15c394jsn4a064b10b3af',
+          'X-RapidAPI-Host': 'currency-converter-by-api-ninjas.p.rapidapi.com'
+        }
+      });
+      const data = await response.json();
+      console.log(data.new_amount);
+      setNumber(data.new_amount+'₪');
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const number = cartItems.reduce((a, c) => a + Math.round(c.amount) * c.quantity, 0);
   return (
-    <div>
+    <div className='screen'>
       <Helmet>
         <title>Shopping Cart</title>
       </Helmet>
@@ -74,7 +122,7 @@ export default function CartScreen() {
         <Col md={8}>
           {cartItems.length === 0 ? (
             <MessageBox>
-              Cart is empty. <Link to="/">Go Shopping</Link>
+              Cart is empty. <Link to="/catalog">Go Shopping</Link>
             </MessageBox>
           ) : (
             <ListGroup>
@@ -133,15 +181,13 @@ export default function CartScreen() {
                   <h3>
                     Subtotal ({cartItems.reduce((a, c) => a + c.quantity, 0)}{' '}
                     items) : $
-                    {cartItems.reduce((a, c) => a +  Math.round(c.amount ) * c.quantity, 0)}
+                    {cartItems.reduce((a, c) => a + Math.round(c.amount) * c.quantity, 0)}
                   </h3>
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <div className="d-grid">
-                    <div>User Name:</div>
-                    <input id='username'></input>
-                    <div>Email:</div>
-                    <input id='email'></input>
+                    <div>Address:</div>
+                    <input id='Address'></input>
                     <br></br>
                     <Button 
                       type="button"
@@ -150,6 +196,28 @@ export default function CartScreen() {
                       disabled={cartItems.length === 0}
                     >
                       Buy Now!
+                    </Button>
+                  </div>
+                </ListGroup.Item>
+              </ListGroup>
+                            <ListGroup  variant="flush">
+                <ListGroup.Item>
+                  <br></br>
+                  <h3>
+                    ${cartItems.reduce((a, c) => a + Math.round(c.amount) * c.quantity, 0)} <FiArrowRight />{" "}
+                  {newNumber}  
+                  </h3>
+                </ListGroup.Item>
+                
+                <ListGroup.Item>
+                  <div className="d-grid">
+                    <Button 
+                      type="button"
+                      variant="primary"
+                      onClick={handleClick}
+                      disabled={cartItems.length === 0}
+                    >
+                      Convert
                     </Button>
                   </div>
                 </ListGroup.Item>

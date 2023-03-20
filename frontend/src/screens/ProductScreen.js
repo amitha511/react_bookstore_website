@@ -6,6 +6,7 @@ import AddCart from '../components/AddCart'
 import { useParams } from 'react-router-dom';
 import { Store } from '../Store';
 import './ProductScreen.css'
+import io from 'socket.io-client';
 
 function ProductScreen() {
   const [product, setProduct] = useState([]);
@@ -31,9 +32,9 @@ function ProductScreen() {
   }, [name])
   
 
-    return(
-      <div className="app" >
-        
+  return (
+      <div className='screen'>
+      <div className="app" >        
             <div className="details" >
               <div className="big-img">
                 <img src={product.img} alt={product.name} />
@@ -53,7 +54,7 @@ function ProductScreen() {
 
           </div>
           </div>
-
+      </div>
       </div>
     );
   };

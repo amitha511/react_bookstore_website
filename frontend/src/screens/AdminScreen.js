@@ -8,6 +8,10 @@ import Container from 'react-bootstrap/Container';
 import '../App.css'
 import ListProduct from '../components/ListProduct';
 import './AdminScreen.css';
+import TextField from '@mui/material/TextField';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import MenuAdmi from '../components/MenuAdmi';
 
 const AdminScreen = () => {
  
@@ -19,7 +23,9 @@ const AdminScreen = () => {
     const [enterdLanguage, setEnterdLanguage] = useState("");
     const [enterdPages, setEnterdPages] = useState("");
     const [enterdYear, setEnterdYear] = useState("");
+    const [List, setList] = useState(<ListProduct></ListProduct>);
 
+    
         async function addExpenseHendler(book) {
             console.log(book);
             const response = await fetch('http://localhost:5000/api/products/addProduct', {
@@ -31,7 +37,9 @@ const AdminScreen = () => {
             });
             const data = await response;
             console.log(data);
-        }
+
+            setList(<ListProduct></ListProduct>)
+    }
 
     const submitHendler = (event) => { 
         event.preventDefault();  //prevent from page reload
@@ -56,6 +64,8 @@ const AdminScreen = () => {
         setEnterdLanguage("");
         setEnterdPages("");
         setEnterdYear("");
+        window.location.reload();
+
 
         
     }
@@ -97,11 +107,9 @@ const AdminScreen = () => {
     }
 
     
-    
-    
-
     return (
-        <div>
+        <div className='screenAdmin'>
+            <MenuAdmi></MenuAdmi>
         <Row>
             <Card>
                 <Card.Body>
@@ -114,55 +122,51 @@ const AdminScreen = () => {
                             <div className='new-expense_controls'>      
                             <Row>                     
                             <Col md={3} className='new-expense_control'> 
-                                <label>Name</label><br/>
-                                <input type="text" value={enterdName} onChange={nameChangeHendler}/>
+                                <TextField required type="text" label="Name" value={enterdName} onChange={nameChangeHendler}/>
                             </Col>
                             <Col md={3} className='new-expense_control'>
-                                <label>Amount</label><br/>
-                                <input type="number" value={enterdAmount} onChange={amountChangeHendler} min="0.01" step="0.01" />
+                                <TextField required type="number" label="Amount" value={enterdAmount} onChange={amountChangeHendler} min="0.01" step="0.01" />
                             </Col>
                             <Col md={3} className='new-expense_control'>
-                                <label>Img</label><br/>
-                                <input type="text" value={enterdImg} onChange={imgChangeHendler}/>
+                                <TextField type="text" label="Image" value={enterdImg} onChange={imgChangeHendler}/>
                             </Col>
                             <Col md={3} className='new-expense_control'>
                                 <label>Genre</label><br/>
-                                                    <select type="text" value={enterdGenre} onChange={genereChangeHendler}>
-                                                         <option value="action">Action</option>
-                                <option value="fantasy">Fantasy</option>
-                                <option value="romantic">Romantic</option>
-                                                        <option value="action">Action</option>
-                                                        <option value="drama">Drama</option>
-                                                        <option value="horror">Horror</option>
-                                                        <option value="comedy">Comedy</option>
-                                                          <option value="adventure">Adventure</option>
-                                </select>
+                                                    <Select  type="text" value={enterdGenre} onChange={genereChangeHendler} label="Genre">
+                                                        <MenuItem value="action">Action</MenuItem >
+                                <MenuItem  value="fantasy">Fantasy</MenuItem >
+                                <MenuItem  value="romantic">Romantic</MenuItem >
+                                                        <MenuItem  value="action">Action</MenuItem >
+                                                        <MenuItem  value="drama">Drama</MenuItem >
+                                                        <MenuItem  value="horror">Horror</MenuItem >
+                                                        <MenuItem  value="comedy">Comedy</MenuItem >
+                                                          <MenuItem  value="adventure">Adventure</MenuItem >
+                                </Select >
                             </Col>
                             </Row>
                             <Row>
-                            <Col md={3} className='new-expense_control'>
-                                <label>Store</label><br/>
-                                <input type="text" value={enterdStore} onChange={storeChangeHendler}/>
+                            <Col md={3} className='new-expense_control'><br/>
+                                <TextField type="text"  label="Store" value={enterdStore} onChange={storeChangeHendler}/>
                             </Col>
                             <Col md={3} className='new-expense_control'>
-                                <label>Language</label><br/>
-                                <input type="text" value={enterdLanguage} onChange={languageChangeHendler}/>
+                                <br/>
+
+                                <TextField type="text"  label="Language" value={enterdLanguage} onChange={languageChangeHendler}/>
                             </Col>
                             <Col md={3} className='new-expense_control'>
-                                <label>Pages</label><br/>
-                                <input type="text" value={enterdPages} onChange={pagesChangeHendler} min="1" step="1"/>
+                               <br/>
+                                <TextField type="number"  label="Pages" value={enterdPages} onChange={pagesChangeHendler} min="1" step="1"/>
                             </Col>
                             <Col md={3} className='new-expense_control'>
-                                <label>Year</label><br/>
-                                <input type="text" value={enterdYear} onChange={yearChangeHendler} min="1900" max="2099"/>
+                                <br/>
+                                <TextField type="number" label="Year" value={enterdYear} onChange={yearChangeHendler} min="1900" max="2099"/>
                             </Col>
                             </Row>                             
                             </div>
-                            
-                                        <Button type="submit">add expense</Button> 
-                                
-                                    </form>   
-                                        </Container>
+                            <br/>
+                                <Button type="submit">add expense</Button>
+                                </form>   
+                            </Container>
 
                         </ListGroup.Item>
                     </ListGroup>
@@ -170,8 +174,8 @@ const AdminScreen = () => {
                     </Card>
 
                 </Row>
-    <br></br>
-    <ListProduct></ListProduct>
+            <br></br>
+            <section>{List}</section>
         </div>
         
     );

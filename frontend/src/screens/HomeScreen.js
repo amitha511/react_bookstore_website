@@ -1,33 +1,62 @@
-import React, { useEffect, useReducer, useState } from 'react';
-import axios from 'axios';
-import logger from 'use-reducer-logger';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Product from '../components/Product';
-import { Helmet } from 'react-helmet-async';
-import LoadingBox from '../components/LoadingBox';
-import MessageBox from '../components/MessageBox';
-import HomeProduct from '../components/HomeProduct'
-import '../App.css'
-// import data from '../data';
+// import React from "react";
+// import BannerBackground from "../Assets/home-banner-background.png";
+import BannerImage from "../book.png";
+import { FiArrowRight } from "react-icons/fi";
+import CatalogScreen from "./catalogScreen";
+import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
+import Background from "../components/Background";
+import React, { useState, useEffect } from 'react';
+import io from 'socket.io-client';
+import SocketIO from "../components/SocketIO";
+const HomeScreen = () => {
+  
+      useEffect(() => {
+    const socket = io();
+    // Socket.IO event listener for userCount updates
+    socket.on('userCount', (count) => {
+      //setUserCount(count);
+    });
 
+    return () => {
+      socket.disconnect();
+    };
 
-function HomeScreen() {
-
-
-    const backgroundImage = {
-    backgroundImage: "url('https://t3.ftcdn.net/jpg/03/58/79/66/360_F_358796655_1Zoe4oyLOoE7lL4izOvy8DvCP0xypYgg.jpg')",
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-  };
-
+      }, []);
+  
+    const handleClick = () => {
+        window.location.href = "/catalog";
+    };
+  
   return (
+  <div className="screen">
+    <div className="home-container">
+      <div className="home-banner-container">
+        <div className="home-text-section">
+          <h1 className="primary-heading">
+            All favorite books in one place
+          </h1>
+          <p className="primary-text">
+            Drama, comedy, fantasy books and more..
+            Bestsellers, of the most successful authors.
+            Everything in one place, highly recommended
+          </p>
+          
+          <button className="secondary-button" onClick={handleClick} >
+              Order Now <FiArrowRight />{" "}
+            </button>
+          <div>
+    </div>
+        </div>
+        <div className="home-image-section">
+          <img src={BannerImage} alt="" />
+        </div>
+      </div>
+      </div>
+      </div>
+
     
-    <div>
-      <div style={backgroundImage}>
-        <h1 style={{ color: 'white', textAlign: 'center', padding: '280px' }}>bookstore</h1>
-    </div>
-    </div>
   );
-}
-export default HomeScreen;
+};
+
+
+export default HomeScreen; 
