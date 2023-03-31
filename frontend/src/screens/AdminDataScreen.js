@@ -1,8 +1,9 @@
-import React from "react"
+import React, { useEffect } from 'react';
 import BoxData from "../components/BoxData"
 import SocketIO from "../components/SocketIO"
 import MenuAdmi from "../components/MenuAdmi"
 import './AdminDataScreen.css'
+import io from 'socket.io-client';
 
 function AdminDataScreen() { 
   useEffect(() => {
