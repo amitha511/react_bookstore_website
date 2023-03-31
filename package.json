@@ -1,6 +1,6 @@
 {
     "scripts": {
-    "start": "npm install npm-run-all --save-dev && npm-run-all --parallel start:**",
+    "start": "npm install concurrently --save-dev && npm-run-all --parallel start:**",
     "start:backend": "cd backend && npm start",
     "start:frontend": "cd frontend && npm start"
   },
@@ -13,6 +13,9 @@
     "@mui/system": "^5.11.13",
     "firebase": "^9.15.0",
     "socket.io": "^4.6.1"
+  },
+    "devDependencies": {
+    "concurrently": "^6.4.0"
   }
 
   
