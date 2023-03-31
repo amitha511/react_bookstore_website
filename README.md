@@ -1,20 +1,6 @@
 ## Bookstore website
 
-to run the project :
-
-1. In the 3 folders - main, frontend and backend must be run the command:
-
-```
-npm i
-```
-
-2. In the backend directory, run the command:
-
-```
-npm start
-```
-
-3. Open new terminal in frontend folder and run:
+to run the project run the command:
 
 ```
 npm start
@@ -22,26 +8,22 @@ npm start
 
 ## Features:
 
-* Register and login to the website, used firebase authentication server.
-* Displaying a catalog when the products are pulled from the Mongodb.
-* Shopping cart, removing and adding products to the cart.<br>
-Only registered users will be able to make a purchase.
-* Product search queries with several parameter.
-* API for currency exchange.
-* page admin:
-    - supports CRUD operations against the product  
+- Register and login to the website, used firebase authentication server.
+- Displaying a catalog when the products are pulled from the Mongodb.
+- Shopping cart, removing and adding products to the cart.<br>
+  Only registered users will be able to make a purchase.
+- Product search queries with several parameter.
+- API for currency exchange.
+- page admin:
+  - supports CRUD operations against the product  
     list in the shop.
-    - Displaying the number of people browsing the 
+  - Displaying the number of people browsing the
     website in real time, used socketIO.
-    - Dashboard page that displays in real time- total 
-    revenue 
-    from sales, number of registered users, number of 
-    items on the website, the names of the books sold 
+  - Dashboard page that displays in real time- total
+    revenue
+    from sales, number of registered users, number of
+    items on the website, the names of the books sold
     and revenue from each user.
-    - User information page in real time - User     
+  - User information page in real time - User  
     details table,
     details of user purchases table and Orders.
- 
-
-
-

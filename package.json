@@ -1,4 +1,8 @@
 {
+  "scripts": {
+    "start": "npm i && cd backend && npm i && cd .. && cd frontend && npm i && cd .. && cd backend && npm start && cd .. && cd frontend && npm start"
+  },
+
   "dependencies": {
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
@@ -8,4 +12,6 @@
     "firebase": "^9.15.0",
     "socket.io": "^4.6.1"
   }
+
+  
 }
