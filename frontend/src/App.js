@@ -4,7 +4,7 @@ import React,{useEffect,} from 'react';
 import Background from './components/Background';
 import RoutesComponent from './components/Routes';
 import NavbarComponent from './components/Navbar';
-import io from 'socket.io-client';
+import io from 'socket.io-client'; 
 
 function App() {
 

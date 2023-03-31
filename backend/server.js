@@ -50,24 +50,6 @@ app.use('/api/users', userRouter);
 app.use('/api/products', productRouter);
 app.use('/', buyingRouter);
 
-app.get('/grouped-by-category', (req, res) => {
-
-  const query = `
-    SELECT store, COUNT(*) AS count
-    FROM products
-    GROUP BY genre
-  `;
-  app.query(query, (err, results) => {
-    if (err) {
-      console.log(err);
-      res.status(500).send('Error fetching grouped products');
-    } else {
-      res.json(results);
-    }
-  });
-
-
-});
 
 const port = process.env.PORT || 5000;
 

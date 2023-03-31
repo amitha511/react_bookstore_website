@@ -12,6 +12,20 @@ function ProductScreen() {
   const [product, setProduct] = useState([]);
   const [name] = useState(useParams().name);
   
+  
+    useEffect(() => {
+    const socket = io();
+    // Socket.IO event listener for userCount updates
+    socket.on('userCount', (count) => {
+      //setUserCount(count);
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+
+    }, []);
+  
  let product1=[];
   useEffect(() => {
   const loadProduct = async () => {

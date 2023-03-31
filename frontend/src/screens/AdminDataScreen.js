@@ -5,7 +5,18 @@ import MenuAdmi from "../components/MenuAdmi"
 import './AdminDataScreen.css'
 
 function AdminDataScreen() { 
+  useEffect(() => {
+    const socket = io();
+    // Socket.IO event listener for userCount updates
+    socket.on('userCount', (count) => {
+      //setUserCount(count);
+    });
 
+    return () => {
+      socket.disconnect();
+    };
+
+  },[]);
     return (
         <div className="screenAdmin">
         <MenuAdmi></MenuAdmi>

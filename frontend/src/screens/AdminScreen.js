@@ -14,7 +14,18 @@ import Select from '@mui/material/Select';
 import MenuAdmi from '../components/MenuAdmi';
 
 const AdminScreen = () => {
- 
+   useEffect(() => {
+    const socket = io();
+    // Socket.IO event listener for userCount updates
+    socket.on('userCount', (count) => {
+      //setUserCount(count);
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+
+  },[]);
     const [enterdName, setEnterdName] = useState("");
     const [enterdAmount, setEnterdAmount] = useState("");
     const [enterdImg, setEnterdImg] = useState("");
