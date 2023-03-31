@@ -8,7 +8,7 @@ npm install npm-run-all --save-dev
 ```
 npm start
 ```
-
+and open: http://localhost:3000
 ## Features:
 
 - Register and login to the website, used firebase authentication server.
