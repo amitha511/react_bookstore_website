@@ -4,7 +4,6 @@ to run the project run the next commands:
 
 ```
 npm install npm-run-all --save-dev
-
 ```
 ```
 npm start
