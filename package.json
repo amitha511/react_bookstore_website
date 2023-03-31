@@ -1,9 +1,9 @@
 {
    "scripts": {
-    "start": "npm-run-all --parallel start:**",
-    "start:backend": "cd backend && npm start",
-    "start:frontend": "cd frontend && npm start"
-  },
+      "start": "npm-run-all --parallel start:**",
+      "start:backend": "cd backend && npm i && npm start",
+      "start:frontend": "cd frontend && npm i && npm start"
+   },
 
   "dependencies": {
     "@emotion/react": "^11.10.6",
