@@ -1,6 +1,8 @@
 {
-  "scripts": {
-    "start": "npm i && cd backend && npm i && cd .. && cd frontend && npm i && cd .. && cd backend && npm start && cd .. && cd frontend && npm start"
+    "scripts": {
+    "start": "npm install npm-run-all --save-dev && npm-run-all --parallel start:**",
+    "start:backend": "cd backend && npm start",
+    "start:frontend": "cd frontend && npm start"
   },
 
   "dependencies": {
