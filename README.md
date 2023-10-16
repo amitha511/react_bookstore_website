@@ -5,10 +5,13 @@ to run the project run the next commands:
 ```
 npm install npm-run-all --save-dev
 ```
+
 ```
 npm start
 ```
+
 and open: http://localhost:3000
+
 ## Features:
 
 - Register and login to the website, used firebase authentication server.
@@ -30,3 +33,5 @@ and open: http://localhost:3000
   - User information page in real time - User  
     details table,
     details of user purchases table and Orders.
+
+![controller](resources/bookstore.png)
